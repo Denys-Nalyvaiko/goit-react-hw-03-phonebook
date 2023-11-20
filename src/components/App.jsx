@@ -10,6 +10,7 @@ import { ContactList } from './ContactList/ContactList';
 import { GlobalStyles } from 'css/GlobalStyles';
 import { Container, Title, ContactsTitle, InfoTitle } from './Container.styled';
 
+const LS_CONTACT_LIST = 'contact-list';
 const theme = createTheme({
   palette: {
     primary: orange,
@@ -22,6 +23,27 @@ export class App extends Component {
     contacts: [],
     filter: '',
   };
+
+  componentDidMount() {
+    const localContacts = JSON.parse(localStorage.getItem(LS_CONTACT_LIST));
+
+    localContacts &&
+      this.setState({
+        contacts: localContacts,
+      });
+  }
+
+  componentDidUpdate(_, prevState) {
+    prevState.contacts !== this.state.contacts &&
+      localStorage.setItem(
+        LS_CONTACT_LIST,
+        JSON.stringify(this.state.contacts)
+      );
+
+    const localContacts = JSON.parse(localStorage.getItem(LS_CONTACT_LIST));
+
+    !localContacts.length && localStorage.removeItem(LS_CONTACT_LIST);
+  }
 
   handleFromSubmit = currentContact => {
     const isContactNameAlreadyExists = this.state.contacts.find(
