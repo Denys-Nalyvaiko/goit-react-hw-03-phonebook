@@ -40,9 +40,7 @@ export class App extends Component {
         JSON.stringify(this.state.contacts)
       );
 
-    const localContacts = JSON.parse(localStorage.getItem(LS_CONTACT_LIST));
-
-    !localContacts.length && localStorage.removeItem(LS_CONTACT_LIST);
+    this.removeItemFromLocalStorageIfEmpty();
   }
 
   handleFromSubmit = currentContact => {
@@ -80,6 +78,11 @@ export class App extends Component {
       contacts: contacts.filter(({ id }) => id !== contactId),
     }));
   };
+
+  removeItemFromLocalStorageIfEmpty() {
+    const localContacts = JSON.parse(localStorage.getItem(LS_CONTACT_LIST));
+    !localContacts.length && localStorage.removeItem(LS_CONTACT_LIST);
+  }
 
   render() {
     return (
